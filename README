@@ -1,26 +1,26 @@
-# HEX A CUBE – Pilot Version
+## HEX A CUBE – Pilot Version
 
 HEX A CUBE is a puzzle game prototype focused on competitive tension
 between the player and autonomous CPU opponents,
 where reaching the goal first determines victory.
 
-This repository contains a **pilot / prototype implementation**  
+This repository contains a pilot / prototype implementation  
 created as part of a short-term development challenge.
 
-The goal of this pilot is **not to deliver a final product**,  
-but to **verify core ideas, module composition, and development decisions**
+The goal of this pilot is not to deliver a final product,  
+but to verify core ideas, module composition, and development decisions
 that will connect to a future full-scale implementation.
 
 ---
 
 ## Overview
 
-- **Type**: Pilot / Prototype
-- **Development Period**: Short-term
-- **Scope**: Core structure & module integration
-- **Status**: Experimental / In-progress
+- Type: Pilot / Prototype
+- Development Period: Short-term
+- Scope: Core structure & module integration
+- Status: Experimental / In-progress
 
-This project focuses on **how individual modules are designed and combined**,  
+This project focuses on how individual modules are designed and combined,  
 rather than on content volume or final polish.
 
 ---
@@ -33,7 +33,7 @@ This pilot was created to verify the following points:
 - Whether the module structure allows flexible extension
 - Whether short-term iteration can lead to a stable foundation for production
 
-**Success criteria for this pilot**:
+Success criteria for this pilot:
 - Core loop can be executed
 - Modules are loosely coupled and replaceable
 - Future expansion points are clearly identified
