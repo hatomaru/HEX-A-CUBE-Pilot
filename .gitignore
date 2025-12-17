@@ -90,5 +90,5 @@ Assets/TextMesh Pro.meta
 /Assets/Scripts/Option_CreditManager
 *.mp3
 *.png
-/Assets/Scripts/Gane/Games
-Assets/Scripts/Gane/Games.meta
+/Assets/Scripts/Game/Games
+Assets/Scripts/Game/Games.meta
