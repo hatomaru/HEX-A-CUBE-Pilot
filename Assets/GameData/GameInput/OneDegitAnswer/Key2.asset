@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0c36ac684bbd445ae0ff1e0abb0ff6, type: 3}
   m_Name: Key2
   m_EditorClassIdentifier: Assembly-CSharp::InputData
-  Key: 0
-  KeyName: Input0
+  Key: 2
+  KeyName: Input2
   icon: {fileID: 0}
