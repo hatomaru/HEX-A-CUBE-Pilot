@@ -20,7 +20,7 @@ public enum Key
 /// <summary>
 /// キー情報を定義するクラス
 /// </summary>
-[CreateAssetMenu(menuName = "InputData", fileName = "GameData/Input")]
+[CreateAssetMenu(menuName = "GameData/Input", fileName = "InputData")]
 public class InputData : ScriptableObject
 {
     public Key Key;        // 操作を表す列挙体
