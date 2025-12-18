@@ -14,7 +14,8 @@ public enum CpuType
 /// <summary>
 /// Cpuの情報を定義するクラス
 /// </summary>
-public class CpuData : ScriptableObject
+[System.Serializable]
+public class CpuData
 {
     public CpuType type;        // Cpuの種類
     public InputData answer;    // Cpuの入力データ

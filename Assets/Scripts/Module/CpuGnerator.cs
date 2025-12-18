@@ -3,8 +3,9 @@ using UnityEngine;
 public class CpuGnerator : MonoBehaviour
 {
     const int cpuMax = 100;                 // 最大Cpu数
-
-    CpuData[] cpus = new CpuData[cpuMax];   // Cpuデータ配列
+    [SerializeField]
+    CpuData[] replaceCpus; // 置き換え用Cpuデータ配列
+    [SerializeField]CpuData[] cpus = new CpuData[cpuMax];   // Cpuデータ配列
     float generateInterval = 0.01f;         // Cpu出現間隔
 
     // Update is called once per frame
@@ -30,6 +31,13 @@ public class CpuGnerator : MonoBehaviour
                 generateInterval *= Random.Range(0.8f, 1.2f);
             }
             cpus[i] = new CpuData(type, i + 1, genDuration);
+        }
+        // 置き換え用Cpuデータで置き換え
+        for (int i = 0; i < replaceCpus.Length; i++)
+        {
+            if (i >= cpuMax)
+                break;
+            cpus[i] = replaceCpus[i];
         }
     }
 }
