@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Key6
   m_EditorClassIdentifier: Assembly-CSharp::InputData
   Key: 6
-  KeyName: Input6
+  KeyName: 6
   icon: {fileID: 0}
