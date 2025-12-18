@@ -56,6 +56,7 @@ public class CpuGnerator : MonoBehaviour
                         .SetEase(Ease.InOutBounce);
                     Destroy(cpuObj, generateInterval * 15);
                 }
+                cpuObj.GetComponent<CpuInstance>().Init(cpus[i]);
                 Debug.Log($"Cpu {cpus[i].cpuNumber} ({cpus[i].type.ToString()}) が出現しました。");
                 cpus[i].isGened = true;
             }

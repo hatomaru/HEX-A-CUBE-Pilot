@@ -12,6 +12,15 @@ public class CpuInstance : MonoBehaviour
     /// <param name="cpuData">初期化するCpuデータ</param>
     public void Init(CpuData cpuData)
     {
+        // 一時的にCpuの回答が未設定の場合、ランダムに設定する
+        if (cpuData.answer == null)
+        {
+            InputData inputData = new InputData();
+            int r = Random.Range(0, 10);
+            inputData.Key = (Key)r;
+            inputData.KeyName = r.ToString();
+            cpuData.answer = inputData;
+        }
         answerText.text = cpuData.answer.KeyName.ToString();
         cpuNumberText.text = $"CPU #{cpuData.cpuNumber}";
     }
