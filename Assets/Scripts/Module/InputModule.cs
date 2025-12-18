@@ -3,6 +3,12 @@ using UnityEngine.InputSystem;
 
 public class InputModule : MonoBehaviour
 {
+    StageManager stageManager;
+
+    private void Awake()
+    {
+        stageManager = GameObject.Find("Manager").GetComponent<StageManager>();
+    }
 
     /// <summary>
     /// 入力した数字を受け取る
@@ -10,7 +16,7 @@ public class InputModule : MonoBehaviour
     /// <param name="number">入力した数字</param>
     void OnTapNumber(int number)
     {
-        Debug.Log("Input Number: " + number);
+        stageManager.OnInput(number);
     }
 
     /// <summary>
