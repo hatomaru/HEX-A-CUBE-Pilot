@@ -8,11 +8,17 @@ public class OneDegitAnswer_Manager : MonoBehaviour
     private void Awake()
     {
         calcGenerator = GetComponent<OneDegitAnswer_CalcGenerator>();
+        Init();
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// お題を初期化する
+    /// </summary>
+    public void Init()
     {
-        
+        calcGenerator = GetComponent<OneDegitAnswer_CalcGenerator>();
+        calcData = calcGenerator.Gen();
+        OneDegitAnswer_Drawer drawer = GetComponent<OneDegitAnswer_Drawer>();
+        drawer.DrawQuestion(calcData);
     }
 }
