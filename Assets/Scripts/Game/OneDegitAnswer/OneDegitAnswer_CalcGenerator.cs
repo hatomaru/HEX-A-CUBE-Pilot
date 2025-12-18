@@ -46,13 +46,6 @@ public class CalcData
 
 public class OneDegitAnswer_CalcGenerator : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        CalcData calc = Gen();
-        Debug.Log($"{calc.firstNumber} {calc.operatorChar} {calc.secondNumber} = {calc.answer}");
-    }
-
     /// <summary>
     /// 答えが一桁になる計算問題を生成する
     /// </summary>
