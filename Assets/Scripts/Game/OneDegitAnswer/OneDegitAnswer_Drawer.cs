@@ -1,16 +1,16 @@
+using TMPro;
 using UnityEngine;
 
 public class OneDegitAnswer_Drawer : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] TextMeshProUGUI questionText;
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// 計算問題を描画する
+    /// </summary>
+    /// <param name="calcData">計算問題データ</param>
+    public void DrawQuestion(CalcData calcData)
     {
-        
+        questionText.text = $"{calcData.firstNumber}{calcData.operatorChar}{calcData.secondNumber}=?";
     }
 }
