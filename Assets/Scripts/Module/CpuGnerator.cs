@@ -68,14 +68,16 @@ public class CpuGnerator : MonoBehaviour
     /// <param name="stageInfo"></param>
     public void Init(StageInfoData stageInfo)
     {
-        generateInterval = stageInfo.TimeLimit / cpuMax;
+        // Cpu出現間隔を計算
+        generateInterval = (stageInfo.TimeLimit * 1.0f) / (cpuMax * 1.0f);
         cpus = new CpuData[cpuMax];
+        // Cpuデータをランダム生成
         for (int i = 0; i < cpuMax; i++)
         {
-            CpuType type = (CpuType)Random.Range(0, 4);
+            CpuType type = (CpuType)Random.Range(0, 2);
             float genDuration = generateInterval * (i + 1);
             // 終盤ではゆらぎを無効にする
-            if (i <= cpuMax - 10)
+            if (i <= cpuMax - 30)
             {
                 // 出現までの時間にゆらぎを加える
                 generateInterval *= Random.Range(0.8f, 1.2f);
