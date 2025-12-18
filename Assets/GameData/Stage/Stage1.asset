@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1efd8f3bcf6816a40a5c1baac66ae6e2, type: 3}
   m_Name: Stage1
   m_EditorClassIdentifier: Assembly-CSharp::StageInfoData
-  StageNumber: 0
-  StageName: 
-  TimeLimit: 0
-  GameLevel: 0
+  StageNumber: 1
+  StageName: "\u30D2\u30C8\u30B1\u30BF\u8A08\u7B97"
+  TimeLimit: 10
+  GameLevel: 1
