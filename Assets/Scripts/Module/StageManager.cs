@@ -10,18 +10,24 @@ public class StageManager : MonoBehaviour
     [SerializeField] UnityEvent onInit;
     CpuGnerator cpuGnerator;
 
+    private void Awake()
+    {
+        cpuGnerator = GetComponent<CpuGnerator>();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Init();
         StageStart();
     }
 
     /// <summary>
+    /// ステージ全体を初期化し開始する関数
     /// </summary>
+    public void StageStart()
     {
         onInit.Invoke();
+        cpuGnerator.Init(stageInfo);
     }
 
     /// <summary>
