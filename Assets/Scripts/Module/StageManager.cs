@@ -3,6 +3,8 @@ using UnityEngine.Events;
 
 public class StageManager : MonoBehaviour
 {
+    [SerializeField]
+    InputData[] inputDatas = new InputData[10]; // 入力データ配列
     [SerializeField] StageInfoData stageInfo;
     [SerializeField] UnityEvent<int> onInput;
     [SerializeField] UnityEvent onInit;
