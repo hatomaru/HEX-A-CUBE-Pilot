@@ -17,19 +17,22 @@ public enum CpuType
 public class CpuData : ScriptableObject
 {
     public CpuType type;        // Cpuの種類
+    public InputData answer;    // Cpuの入力データ
     public int cpuNumber;       // Cpuの識別番号
     public float genDuration;   // 出現までの時間
     public bool isGened = false;// Cpuが出現したか
+    
     /// <summary>
     /// Cpuのデータを初期化するコンストラクタ
     /// </summary>
     /// <param name="type">Cpuの種類</param>
     /// <param name="cpuNumber">識別番号</param>
     /// <param name="genDuration">出現までの時間</param>
-    CpuData(CpuType type, int cpuNumber, float genDuration)
+    public CpuData(CpuType type, int cpuNumber, float genDuration)
     {
         this.type = type;
         this.cpuNumber = cpuNumber;
         this.genDuration = genDuration;
+        isGened = false;
     }
 }
