@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class OneDegitAnswer_Manager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private CalcData calcData;
+    private OneDegitAnswer_CalcGenerator calcGenerator;
+
+    private void Awake()
     {
-        
+        calcGenerator = GetComponent<OneDegitAnswer_CalcGenerator>();
     }
 
     // Update is called once per frame
