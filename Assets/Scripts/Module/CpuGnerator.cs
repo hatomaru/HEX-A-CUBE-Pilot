@@ -78,10 +78,10 @@ public class CpuGnerator : MonoBehaviour
             CpuType type = (CpuType)Random.Range(0, 2);
             float genDuration = generateInterval * (i + 1);
             // 終盤ではゆらぎを無効にする
-            if (i <= cpuMax - 30)
+            if (i <= cpuMax - 20)
             {
                 // 出現までの時間にゆらぎを加える
-                generateInterval *= Random.Range(0.8f, 1.2f);
+                genDuration *= Random.Range(0.8f, 1.2f);
             }
             cpus[i] = new CpuData(type, i + 1, genDuration);
         }
