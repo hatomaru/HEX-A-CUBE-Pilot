@@ -9,6 +9,7 @@ public class InputInstance : MonoBehaviour
 {
     RectTransform rect;
     Vector3 defaultScale = new Vector3(1.7f, 1.41f, 1.41f);
+    [SerializeField] Sprite defaultIcon;              // デフォルトアイコン
 
     [SerializeField] TextMeshProUGUI numberText;          // 入力テキスト
     [SerializeField] TextMeshProUGUI numberDetailText;    // 入力詳細テキスト
@@ -21,6 +22,7 @@ public class InputInstance : MonoBehaviour
         rect = GetComponent<RectTransform>();
         InputData inputData = new InputData();
         inputData.Key = Key.Key0;
+        inputData.icon = defaultIcon;
         rect.localScale = Vector3.zero;
         await Init(inputData,true);
         Debug.Log("InputInstance Awake Finished");
