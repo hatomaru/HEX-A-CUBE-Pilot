@@ -26,7 +26,7 @@ public class CpuGnerator : MonoBehaviour
             if (cpus[i] == null || cpus[i].genDuration < 0)
                 continue;
             cpus[i].genDuration -= Time.deltaTime;
-            if(cpus[i].genDuration <= 0)
+            if (cpus[i].genDuration <= 0)
             {
                 // Cpu出現処理
                 GameObject cpuObj;
@@ -70,19 +70,80 @@ public class CpuGnerator : MonoBehaviour
     public void Init(StageInfoData stageInfo)
     {
         // Cpu出現間隔を計算
-        generateInterval = (stageInfo.TimeLimit * 1.0f) / (cpuMax * 1.0f);
         cpus = new CpuData[cpuMax];
+        float cpuGenSec = stageInfo.TimeLimit * 0.15f;
+        float beforeSec = 0;
+        generateInterval = (cpuGenSec * 1.0f) / (20 * 1.0f);
         // Cpuデータをランダム生成
-        for (int i = 0; i < cpuMax; i++)
+        for (int i = 0; i < 20; i++)
         {
-            CpuType type = (CpuType)Random.Range(0, 2);
-            float genDuration = generateInterval * (i + 1);
+            CpuType type = CpuType.Misstake;
+            float genDuration = beforeSec + (generateInterval * (i + 1));
             // 終盤ではゆらぎを無効にする
             if (i <= cpuMax - 20)
             {
                 // 出現までの時間にゆらぎを加える
                 genDuration *= Random.Range(0.8f, 1.2f);
             }
+            cpus[i] = new CpuData(type, i + 1, genDuration);
+        }
+        // Cpu出現間隔を計算
+        cpuGenSec = stageInfo.TimeLimit * 0.55f;
+        beforeSec = stageInfo.TimeLimit * 0.15f;
+        generateInterval = (cpuGenSec * 1.0f) / (50 * 1.0f);
+        // Cpuデータをランダム生成
+        for (int i = 20; i < 70; i++)
+        {
+            CpuType type = CpuType.Misstake;
+            if (Random.Range(0, 100) <= 40)
+            {
+                type = CpuType.Virus;
+            }
+            float genDuration = beforeSec + (generateInterval * (i - 19));
+            // 終盤ではゆらぎを無効にする
+            if (i <= cpuMax - 20)
+            {
+                // 出現までの時間にゆらぎを加える
+                genDuration *= Random.Range(0.8f, 1.2f);
+            }
+            cpus[i] = new CpuData(type, i + 1, genDuration);
+        }
+        // Cpu出現間隔を計算
+        cpuGenSec = stageInfo.TimeLimit * 0.15f;
+        beforeSec = stageInfo.TimeLimit * 0.7f;
+        generateInterval = (cpuGenSec * 1.0f) / (25 * 1.0f);
+        // Cpuデータをランダム生成
+        for (int i = 70; i < 95; i++)
+        {
+            CpuType type = CpuType.Misstake;
+            if (Random.Range(0, 100) <= 80)
+            {
+                type = CpuType.Virus;
+            }
+            float genDuration = beforeSec + (generateInterval * (i - 69));
+            // 終盤ではゆらぎを無効にする
+            if (i <= cpuMax - 20)
+            {
+                // 出現までの時間にゆらぎを加える
+                genDuration *= Random.Range(0.8f, 1.2f);
+            }
+            cpus[i] = new CpuData(type, i + 1, genDuration);
+        }
+        // Cpu出現間隔を計算
+        cpuGenSec = stageInfo.TimeLimit * 0.15f;
+        beforeSec = stageInfo.TimeLimit * 0.85f;
+        generateInterval = (cpuGenSec * 1.0f) / (20 * 1.0f);
+        // Cpuデータをランダム生成
+        for (int i = 95; i < 100; i++)
+        {
+            CpuType type = CpuType.Misstake;
+            if (Random.Range(0, 100) <= 80)
+            {
+                type = CpuType.Virus;
+            }
+            float genDuration = beforeSec + (generateInterval * (i - 94));
+            // 出現までの時間にゆらぎを加える
+            generateInterval *= 1.1f;
             cpus[i] = new CpuData(type, i + 1, genDuration);
         }
         // 置き換え用Cpuデータで置き換え
