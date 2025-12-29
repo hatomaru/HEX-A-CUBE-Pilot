@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class InputInstance : MonoBehaviour
 {
+    InputData inputData;
     RectTransform rect;
     Vector3 defaultScale = new Vector3(1.7f, 1.41f, 1.41f);
     [SerializeField] Sprite defaultIcon;              // デフォルトアイコン
@@ -20,20 +21,26 @@ public class InputInstance : MonoBehaviour
     async void Awake()
     {
         rect = GetComponent<RectTransform>();
-        InputData inputData = new InputData();
+        inputData = new InputData();
         inputData.Key = Key.Key0;
         inputData.icon = defaultIcon;
         rect.localScale = Vector3.zero;
-        await Init(inputData,true);
-        Debug.Log("InputInstance Awake Finished");
+    }
+
+    /// <summary>
+    /// 入力データを設定する
+    /// </summary>
+    /// <param name="data">データ</param>
+    public void SetInputData(InputData data)
+    {
+        inputData = data;
     }
 
     /// <summary>
     /// 入力を初期化する
     /// </summary>
-    /// <param name="inputData">初期化する入力データ</param>
     /// <param name="isAnimation">アニメーションの有無</param>
-    public async UniTask Init(InputData inputData, bool isAnimation = false)
+    public async UniTask Init(bool isAnimation = false)
     {
         numberGroup.DOKill();
         detailGroup.DOKill();
