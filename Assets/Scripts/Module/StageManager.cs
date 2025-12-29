@@ -57,9 +57,26 @@ public class StageManager : MonoBehaviour
         onInit.Invoke();
         await stageUI.StageWindowPopuop(token);
         await UniTask.Delay(50, cancellationToken: token);
+        await PlayInputGuide(token);
         cpuGnerator.Init(stageInfo);
         await UniTask.Delay(20000, cancellationToken: token);
-        await stageUI.StageWindowClose(token);
+    }
+
+    /// <summary>
+    /// 操作案内を表示する関数
+    /// </summary>
+    private async UniTask PlayInputGuide(CancellationToken token)
+    {
+        int enabledInputCount = 0;
+        foreach (var inputInstance in inputInstances)
+        {
+            if (inputInstance != null)
+            {
+                enabledInputCount++;
+                inputInstance.Init(true).Forget();
+                await UniTask.Delay(BaseInputGuideDelay + AdditionalInputGuideDelay * enabledInputCount, cancellationToken: token);
+            }
+        }
     }
 
     /// <summary>
