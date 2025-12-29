@@ -1,33 +1,41 @@
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class StageManager : MonoBehaviour
 {
-    [SerializeField]
     InputData[] inputDatas = new InputData[10]; // 入力データ配列
     [SerializeField] StageInfoData stageInfo;
     [SerializeField] UnityEvent<int> onInput;
     [SerializeField] UnityEvent onInit;
     CpuGnerator cpuGnerator;
+    StageUI stageUI;
+    public InputInstance[] inputInstances = new InputInstance[10]; // 入力インスタンス配列
 
     private void Awake()
     {
         cpuGnerator = GetComponent<CpuGnerator>();
+        stageUI = GetComponent<StageUI>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StageStart();
+        StageStart(destroyCancellationToken).Yield();
     }
 
     /// <summary>
     /// ステージ全体を初期化し開始する関数
     /// </summary>
-    public void StageStart()
+    public async UniTask StageStart(CancellationToken token)
     {
         onInit.Invoke();
+        await stageUI.StageWindowPopuop(token);
         cpuGnerator.Init(stageInfo);
+        await UniTask.Delay(20000, cancellationToken: token);
+        await stageUI.StageWindowClose(token);
     }
 
     /// <summary>
