@@ -1,11 +1,13 @@
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class StageManager : MonoBehaviour
 {
+    const int BaseInputGuideDelay = 120; // 基本操作案内の遅延時間
+    const int AdditionalInputGuideDelay = 7; // 追加操作案内の遅延時間
+    public float stageTimmer { get; private set; } = 0f; // ステージタイマー
     InputData[] inputDatas = new InputData[10]; // 入力データ配列
     [SerializeField] StageInfoData stageInfo;
     [SerializeField] UnityEvent<int> onInput;
@@ -23,16 +25,32 @@ public class StageManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StageStart(destroyCancellationToken).Yield();
+        GameLoop(destroyCancellationToken).Forget();
+    }
+
+    /// <summary>
+    /// ゲームループ
+    /// </summary>
+    private async UniTask GameLoop(CancellationToken token)
+    {
+        await StageStart(token);
+        while (!token.IsCancellationRequested)
+        {
+            UpdateTimer();
+        }
+        await stageUI.StageWindowClose(token);
+    }
+
     }
 
     /// <summary>
     /// ステージ全体を初期化し開始する関数
     /// </summary>
-    public async UniTask StageStart(CancellationToken token)
+    private async UniTask StageStart(CancellationToken token)
     {
         onInit.Invoke();
         await stageUI.StageWindowPopuop(token);
+        await UniTask.Delay(50, cancellationToken: token);
         cpuGnerator.Init(stageInfo);
         await UniTask.Delay(20000, cancellationToken: token);
         await stageUI.StageWindowClose(token);
