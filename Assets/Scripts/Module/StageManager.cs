@@ -59,6 +59,7 @@ public class StageManager : MonoBehaviour
     /// </summary>
     private async UniTask StageStart(CancellationToken token)
     {
+        stageTimmer = stageInfo.TimeLimit;
         onInit.Invoke();
         await stageUI.StageWindowPopuop(token);
         await UniTask.Delay(50, cancellationToken: token);
