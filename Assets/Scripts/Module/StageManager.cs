@@ -41,6 +41,12 @@ public class StageManager : MonoBehaviour
         await stageUI.StageWindowClose(token);
     }
 
+    /// <summary>
+    /// タイマーを更新する関数
+    /// </summary>
+    private void UpdateTimer()
+    {
+        stageTimmer -= Time.deltaTime;
     }
 
     /// <summary>
