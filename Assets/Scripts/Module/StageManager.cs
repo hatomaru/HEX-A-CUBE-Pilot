@@ -36,6 +36,11 @@ public class StageManager : MonoBehaviour
         await StageStart(token);
         while (!token.IsCancellationRequested)
         {
+            // タイマーが0以下になったらループを抜ける
+            if (stageTimmer <= 0f)
+            {
+                break;
+            }
             UpdateTimer();
         }
         await stageUI.StageWindowClose(token);
