@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CpuGnerator : MonoBehaviour
 {
+    bool isInit = false;                  // 初期化フラグ
     const int cpuMax = 100;                 // 最大Cpu数
 
     [SerializeField] Transform frontParent;      // 前方親オブジェクト
@@ -20,6 +21,8 @@ public class CpuGnerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!isInit)
+            return;
         // 出現までの時間を減少させる
         for (int i = 0; i < cpuMax; i++)
         {
@@ -59,6 +62,10 @@ public class CpuGnerator : MonoBehaviour
                 cpuObj.GetComponent<CpuInstance>().Init(cpus[i]);
                 Debug.Log($"Cpu {cpus[i].cpuNumber} ({cpus[i].type.ToString()}) が出現しました。");
                 cpus[i].isGened = true;
+                if(i == 99)
+                {
+                    isInit = false;
+                }
             }
         }
     }
@@ -153,5 +160,6 @@ public class CpuGnerator : MonoBehaviour
                 break;
             cpus[i] = replaceCpus[i];
         }
+        isInit = true;
     }
 }
