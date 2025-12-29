@@ -9,11 +9,21 @@ using UnityEngine.Events;
 public class StageUI : MonoBehaviour
 {
     [SerializeField] RectTransform stageWindow; // ステージウィンドウ
+    [SerializeField] RectTransform stageTimerFill; // ステージタイマー
+    StageManager stageManager;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
+        stageManager = GetComponent<StageManager>();
         stageWindow.localScale = Vector3.zero;
+    }
+
+    /// <summary>
+    /// UIを更新する関数
+    /// </summary>
+    public void UpdateUI()
+    {
+        stageTimerFill.localScale = new Vector3(stageManager.stageTimmer / stageManager.GetStageInfo().TimeLimit, 1f, 1f);
     }
 
     /// <summary>

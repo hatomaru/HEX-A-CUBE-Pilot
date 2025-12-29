@@ -28,6 +28,8 @@ public class StageManager : MonoBehaviour
         GameLoop(destroyCancellationToken).Forget();
     }
 
+    public StageInfoData StageInfo => stageInfo;
+
     /// <summary>
     /// ゲームループ
     /// </summary>
@@ -42,7 +44,10 @@ public class StageManager : MonoBehaviour
                 break;
             }
             UpdateTimer();
+            stageUI.UpdateUI();
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
+        await UniTask.Delay(300, cancellationToken: token);
         await stageUI.StageWindowClose(token);
     }
 
@@ -65,7 +70,6 @@ public class StageManager : MonoBehaviour
         await UniTask.Delay(50, cancellationToken: token);
         await PlayInputGuide(token);
         cpuGnerator.Init(stageInfo);
-        await UniTask.Delay(20000, cancellationToken: token);
     }
 
     /// <summary>
