@@ -4,6 +4,7 @@ public class OneDegitAnswer_Manager : MonoBehaviour
 {
     private CalcData calcData;
     private OneDegitAnswer_CalcGenerator calcGenerator;
+    [SerializeField] StageManager stageManager;
 
     private void Awake()
     {
@@ -17,6 +18,13 @@ public class OneDegitAnswer_Manager : MonoBehaviour
     public void Init()
     {
         calcGenerator = GetComponent<OneDegitAnswer_CalcGenerator>();
+        // 入力インスタンスに入力データを設定する
+        for (int i = 0; i < stageManager.inputInstances.Length; i++)
+        {
+            if (stageManager.inputInstances[i] == null)
+                continue;
+            stageManager.inputInstances[i].SetInputData(new InputData() { Key = (Key)i });
+        }
         // 計算問題を生成する
         calcData = calcGenerator.Gen();
         OneDegitAnswer_Drawer drawer = GetComponent<OneDegitAnswer_Drawer>();
