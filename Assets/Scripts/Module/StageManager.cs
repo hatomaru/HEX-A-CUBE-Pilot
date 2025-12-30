@@ -12,6 +12,8 @@ public class StageManager : MonoBehaviour
     [SerializeField] StageInfoData stageInfo;
     [SerializeField] UnityEvent<int> onInput;
     [SerializeField] UnityEvent onInit;
+    [SerializeField] MissUI missUI;
+
     CpuGnerator cpuGnerator;
     StageUI stageUI;
     public InputInstance[] inputInstances = new InputInstance[10]; // 入力インスタンス配列
@@ -48,6 +50,8 @@ public class StageManager : MonoBehaviour
             await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
         await UniTask.Delay(300, cancellationToken: token);
+        await missUI.PlayMiss(token);
+        await UniTask.Delay(1000, cancellationToken: token);
         await stageUI.StageWindowClose(token);
     }
 
