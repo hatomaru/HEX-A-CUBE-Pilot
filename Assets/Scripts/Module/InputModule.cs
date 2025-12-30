@@ -20,6 +20,16 @@ public class InputModule : MonoBehaviour
     }
 
     /// <summary>
+    /// 0を押した時の処理
+    /// </summary>
+    public void OnZero(InputAction.CallbackContext context)
+    {
+        // 押された瞬間でPerformedとなる
+        if (!context.performed) return;
+        OnTapNumber(0);
+    }
+
+    /// <summary>
     /// 1を押した時の処理
     /// </summary>
     public void OnOne(InputAction.CallbackContext context)
