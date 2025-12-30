@@ -18,8 +18,6 @@ public class MissUI : MonoBehaviour
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
         commandCanvasGroup.alpha = 0f;
-
-        PlayMiss(destroyCancellationToken).Forget();
     }
 
     /// <summary>
