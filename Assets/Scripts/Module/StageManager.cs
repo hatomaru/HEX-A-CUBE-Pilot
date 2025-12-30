@@ -64,6 +64,16 @@ public class StageManager : MonoBehaviour
     }
 
     /// <summary>
+    /// ミス処理を行う関数
+    /// </summary>
+    private async UniTask StageMiss(CancellationToken token)
+    {
+        isInGameLoop = false;
+        canProgressGame = false;
+        await missUI.PlayMiss(token);
+        isInGame.Value = false;
+    }
+    /// <summary>
     /// ステージ全体を初期化し開始する関数
     /// </summary>
     private async UniTask StageStart(CancellationToken token)
