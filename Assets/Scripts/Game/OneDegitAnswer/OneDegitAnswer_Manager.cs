@@ -48,7 +48,7 @@ public class OneDegitAnswer_Manager : MonoBehaviour
         else
         {
             // 不正解
-            stageManager.StageMiss(destroyCancellationToken).Forget();
+            stageManager.StageMiss("不正解です...",destroyCancellationToken).Forget();
         }
     }
 }

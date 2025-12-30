@@ -64,7 +64,7 @@ public class StageManager : MonoBehaviour
             await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
         await UniTask.Delay(300, cancellationToken: token);
-        await StageMiss(token);
+        await StageMiss("Cpuが先に正解しました。",token);
     }
 
     /// <summary>
@@ -78,11 +78,11 @@ public class StageManager : MonoBehaviour
     /// <summary>
     /// ミス処理を行う関数
     /// </summary>
-    public async UniTask StageMiss(CancellationToken token)
+    public async UniTask StageMiss(string reason,CancellationToken token)
     {
         isInGameLoop = false;
         canProgressGame = false;
-        await missUI.PlayMiss(token);
+        await missUI.PlayMiss(reason,token);
         isInGame.Value = false;
     }
 

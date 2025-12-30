@@ -3,13 +3,14 @@ using LitMotion;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using LitMotion.Extensions;
+using TMPro;
 
 public class MissUI : MonoBehaviour
 {
     CanvasGroup canvasGroup;
-    [SerializeField]CanvasGroup commandCanvasGroup;
+    [SerializeField] CanvasGroup commandCanvasGroup;
     [SerializeField] RectTransform resultRect;
-
+    [SerializeField] TextMeshProUGUI reasonText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,8 +24,10 @@ public class MissUI : MonoBehaviour
     /// <summary>
     /// ミス演出を再生する
     /// </summary>
-    public async UniTask PlayMiss(CancellationToken token)
+    /// <param name="reason">ミスの理由</param>
+    public async UniTask PlayMiss(string reason,CancellationToken token)
     {
+        reasonText.text = reason;
         LMotion.Create(0f,1f,0.25f)
             .WithEase(Ease.InSine)
             .BindToAlpha(canvasGroup)
