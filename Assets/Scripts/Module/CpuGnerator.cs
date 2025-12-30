@@ -21,7 +21,7 @@ public class CpuGnerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!isInit)
+        if(!StageManager.isInGameLoop || !isInit)
             return;
         // 出現までの時間を減少させる
         for (int i = 0; i < cpuMax; i++)

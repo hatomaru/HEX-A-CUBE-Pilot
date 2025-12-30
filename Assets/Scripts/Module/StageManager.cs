@@ -10,9 +10,9 @@ public class StageManager : MonoBehaviour
     const int BaseInputGuideDelay = 120;     // 基本操作案内の遅延時間
     const int AdditionalInputGuideDelay = 7; // 追加操作案内の遅延時間
 
-    public static bool canProgressGame = false;             // ゲーム進行可能フラグ
-    private bool isInGameLoop = false;                      // ゲームループ中フラグ
-    public ReactiveProperty<bool> isInGame = new(false);    // ゲーム中フラグ
+    public static bool canProgressGame = false;                     // ゲーム進行可能フラグ
+    public static bool isInGameLoop { get; private set; } = false;  // ゲームループ中フラグ
+    public ReactiveProperty<bool> isInGame = new(false);            // ゲーム中フラグ
 
     public float stageTimmer { get; private set; } = 0f; // ステージタイマー
     InputData[] inputDatas = new InputData[10]; // 入力データ配列
@@ -35,7 +35,7 @@ public class StageManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameLoop(destroyCancellationToken).Forget();
+
     }
 
     public StageInfoData StageInfo => stageInfo;
@@ -43,11 +43,21 @@ public class StageManager : MonoBehaviour
     /// <summary>
     /// ゲームループ
     /// </summary>
-    private async UniTask GameLoop(CancellationToken token)
+    public async UniTask GameLoop(CancellationToken token)
     {
+        // 操作案内をリセット
+        foreach (var inputInstance in inputInstances)
+        {
+            if (inputInstance == null)
+            {
+                continue;
+            }
+            inputInstance.ResetInput();
+        }
+        stageUI.ResetUI();
+        await StageStart(token);
         isInGameLoop = true;
         isInGame.Value = true;
-        await StageStart(token);
         while (!token.IsCancellationRequested)
         {
             if(!isInGameLoop)
@@ -76,6 +86,19 @@ public class StageManager : MonoBehaviour
     }
 
     /// <summary>
+    /// ステージ全体を初期化し開始する関数
+    /// </summary>
+    private async UniTask StageStart(CancellationToken token)
+    {
+        stageTimmer = stageInfo.TimeLimit;
+        onInit.Invoke();
+        await stageUI.StageWindowPopuop(token);
+        await UniTask.Delay(50, cancellationToken: token);
+        await PlayInputGuide(token);
+        cpuGnerator.Init(stageInfo);
+    }
+
+    /// <summary>
     /// ミス処理を行う関数
     /// </summary>
     public async UniTask StageMiss(string reason,CancellationToken token)
@@ -99,19 +122,6 @@ public class StageManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ステージ全体を初期化し開始する関数
-    /// </summary>
-    private async UniTask StageStart(CancellationToken token)
-    {
-        stageTimmer = stageInfo.TimeLimit;
-        onInit.Invoke();
-        await stageUI.StageWindowPopuop(token);
-        await UniTask.Delay(50, cancellationToken: token);
-        await PlayInputGuide(token);
-        cpuGnerator.Init(stageInfo);
-    }
-
-    /// <summary>
     /// 操作案内を表示する関数
     /// </summary>
     private async UniTask PlayInputGuide(CancellationToken token)
@@ -123,7 +133,7 @@ public class StageManager : MonoBehaviour
             {
                 enabledInputCount++;
                 inputInstance.Init(true).Forget();
-                await UniTask.Delay(BaseInputGuideDelay + AdditionalInputGuideDelay * enabledInputCount, cancellationToken: token);
+                //await UniTask.Delay(BaseInputGuideDelay + AdditionalInputGuideDelay * enabledInputCount, cancellationToken: token);
             }
         }
     }
@@ -134,6 +144,10 @@ public class StageManager : MonoBehaviour
     /// <param name="input">入力</param>
     public void OnInput(int input)
     {
+        if(!isInGameLoop)
+        {
+            return;
+        }
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         Debug.Log("Input Number: " + input);
 #endif
