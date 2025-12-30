@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class OneDegitAnswer_Manager : MonoBehaviour
@@ -38,6 +39,16 @@ public class OneDegitAnswer_Manager : MonoBehaviour
     /// <param name="input">入力</param>
     public void OnInput(int input)
     {
-        Debug.Log("Input Number: " + input);
+        // 正解判定
+        if (calcData.answer == input)
+        {
+            // 正解
+            stageManager.StageClear(destroyCancellationToken).Forget();
+        }
+        else
+        {
+            // 不正解
+            stageManager.StageMiss(destroyCancellationToken).Forget();
+        }
     }
 }
