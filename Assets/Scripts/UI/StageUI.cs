@@ -2,9 +2,7 @@ using Cysharp.Threading.Tasks;
 using LitMotion;
 using LitMotion.Extensions;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class StageUI : MonoBehaviour
 {
@@ -15,7 +13,15 @@ public class StageUI : MonoBehaviour
     void Awake()
     {
         stageManager = GetComponent<StageManager>();
-        stageWindow.localScale = Vector3.zero;
+        stageWindow.localScale = Vector3.one;
+    }
+
+    /// <summary>
+    /// UIを初期化する関数
+    /// </summary>
+    public void ResetUI()
+    {
+        stageTimerFill.localScale = Vector3.one;
     }
 
     /// <summary>
