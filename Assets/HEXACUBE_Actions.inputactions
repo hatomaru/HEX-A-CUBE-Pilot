@@ -6,6 +6,15 @@
             "id": "b6ddfa59-40ab-49a7-92e1-a2f95b1e5fc6",
             "actions": [
                 {
+                    "name": "Zero",
+                    "type": "Button",
+                    "id": "aa26f3f5-477d-40aa-acd5-2084c1b4d7c8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "One",
                     "type": "Button",
                     "id": "b0db0d65-6ebe-4ea0-8d37-0cf88fbe4c43",
@@ -107,6 +116,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "One",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e68afca5-d1e3-4baf-91cd-dd4b9deaea25",
+                    "path": "<Keyboard>/numpad0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zero",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4269c354-47ea-446d-aa01-35d7906dda5e",
+                    "path": "<Keyboard>/0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zero",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
