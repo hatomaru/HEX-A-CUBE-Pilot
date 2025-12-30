@@ -37,9 +37,15 @@ public class StageManager : MonoBehaviour
     /// </summary>
     private async UniTask GameLoop(CancellationToken token)
     {
+        isInGameLoop = true;
+        isInGame.Value = true;
         await StageStart(token);
         while (!token.IsCancellationRequested)
         {
+            if(!isInGameLoop)
+            {
+                return;
+            }
             // タイマーが0以下になったらループを抜ける
             if (stageTimmer <= 0f)
             {
