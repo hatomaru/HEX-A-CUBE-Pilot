@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -7,11 +8,14 @@ using UnityEngine.UI;
 
 public class InputInstance : MonoBehaviour
 {
+    readonly Color onColorFill = new Color(0.09967953f, 0.3880405f, 0.5031446f, 0.9f);
+    readonly Color offColorFill = new Color(0.01542656f, 0.2393069f, 0.327044f, 0.9f);
+
     InputData inputData;
     RectTransform rect;
     Vector3 defaultScale = new Vector3(1.7f, 1.41f, 1.41f);
     [SerializeField] Sprite defaultIcon;              // デフォルトアイコン
-
+    [SerializeField] Image           backgroundImage;     // 背景画像
     [SerializeField] TextMeshProUGUI numberText;          // 入力テキスト
     [SerializeField] TextMeshProUGUI numberDetailText;    // 入力詳細テキスト
     [SerializeField] Image           numberImage;         // 入力画像
@@ -20,6 +24,7 @@ public class InputInstance : MonoBehaviour
 
     async void Awake()
     {
+        backgroundImage = GetComponent<Image>();
         rect = GetComponent<RectTransform>();
         inputData = new InputData();
         inputData.Key = Key.Key0;
@@ -34,6 +39,16 @@ public class InputInstance : MonoBehaviour
     public void SetInputData(InputData data)
     {
         inputData = data;
+    }
+
+    /// <summary>
+    /// 入力したときの処理
+    /// </summary>
+    public async UniTask OnPress(CancellationToken token)
+    {
+        backgroundImage.color = offColorFill;
+        await UniTask.Delay(250,cancellationToken: token);
+        backgroundImage.color = onColorFill;
     }
 
     /// <summary>
