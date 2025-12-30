@@ -1,18 +1,26 @@
 using Cysharp.Threading.Tasks;
+using R3;
+using System;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class StageManager : MonoBehaviour
 {
-    const int BaseInputGuideDelay = 120; // 基本操作案内の遅延時間
+    const int BaseInputGuideDelay = 120;     // 基本操作案内の遅延時間
     const int AdditionalInputGuideDelay = 7; // 追加操作案内の遅延時間
+
+    public static bool canProgressGame = false;             // ゲーム進行可能フラグ
+    private bool isInGameLoop = false;                      // ゲームループ中フラグ
+    public ReactiveProperty<bool> isInGame = new(false);    // ゲーム中フラグ
+
     public float stageTimmer { get; private set; } = 0f; // ステージタイマー
     InputData[] inputDatas = new InputData[10]; // 入力データ配列
     [SerializeField] StageInfoData stageInfo;
     [SerializeField] UnityEvent<int> onInput;
     [SerializeField] UnityEvent onInit;
     [SerializeField] MissUI missUI;
+    [SerializeField] StageClearUI stageClearUI;
 
     CpuGnerator cpuGnerator;
     StageUI stageUI;
@@ -56,9 +64,7 @@ public class StageManager : MonoBehaviour
             await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
         await UniTask.Delay(300, cancellationToken: token);
-        await missUI.PlayMiss(token);
-        await UniTask.Delay(1000, cancellationToken: token);
-        await stageUI.StageWindowClose(token);
+        await StageMiss(token);
     }
 
     /// <summary>
@@ -72,7 +78,7 @@ public class StageManager : MonoBehaviour
     /// <summary>
     /// ミス処理を行う関数
     /// </summary>
-    private async UniTask StageMiss(CancellationToken token)
+    public async UniTask StageMiss(CancellationToken token)
     {
         isInGameLoop = false;
         canProgressGame = false;
@@ -83,7 +89,7 @@ public class StageManager : MonoBehaviour
     /// <summary>
     /// ステージクリア処理を行う関数
     /// </summary>
-    private async UniTask StageClear(CancellationToken token)
+    public async UniTask StageClear(CancellationToken token)
     {
         isInGameLoop = false;
         await stageUI.StageWindowClose(token);
@@ -128,6 +134,9 @@ public class StageManager : MonoBehaviour
     /// <param name="input">入力</param>
     public void OnInput(int input)
     {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        Debug.Log("Input Number: " + input);
+#endif
         if (inputInstances[input] != null)
         {
             inputInstances[input].OnPress(destroyCancellationToken).Forget();
