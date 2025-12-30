@@ -73,6 +73,19 @@ public class StageManager : MonoBehaviour
         await missUI.PlayMiss(token);
         isInGame.Value = false;
     }
+
+    /// <summary>
+    /// ステージクリア処理を行う関数
+    /// </summary>
+    private async UniTask StageClear(CancellationToken token)
+    {
+        isInGameLoop = false;
+        await stageUI.StageWindowClose(token);
+        await UniTask.Delay(200, cancellationToken: token);
+        await stageClearUI.PlayHexCreate("6bab4dac5c809fc9bd5d3bea39c73d7d", token);
+        isInGame.Value = false;
+    }
+
     /// <summary>
     /// ステージ全体を初期化し開始する関数
     /// </summary>
