@@ -29,6 +29,14 @@ public class InputInstance : MonoBehaviour
         inputData = new InputData();
         inputData.Key = Key.Key0;
         inputData.icon = defaultIcon;
+        ResetInput();
+    }
+
+    /// <summary>
+    /// 入力データをリセットする
+    /// </summary>
+    public void ResetInput()
+    {
         rect.localScale = Vector3.zero;
     }
 
