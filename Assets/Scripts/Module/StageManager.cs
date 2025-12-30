@@ -95,6 +95,10 @@ public class StageManager : MonoBehaviour
     /// <param name="input">入力</param>
     public void OnInput(int input)
     {
+        if (inputInstances[input] != null)
+        {
+            inputInstances[input].OnPress(destroyCancellationToken).Forget();
+        }
         onInput?.Invoke(input);
     }
 
