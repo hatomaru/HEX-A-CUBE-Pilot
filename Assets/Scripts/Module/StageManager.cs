@@ -174,6 +174,14 @@ public class StageManager : MonoBehaviour
     }
 
     /// <summary>
+    /// パフォーマーの魔法を元に戻す関数
+    /// </summary>
+    public void OnMagicRestore()
+    {
+        onMagicRestore?.Invoke();
+    }
+
+    /// <summary>
     /// お題の難易度を設定する関数
     /// </summary>
     /// <param name="level">お題の難易度</param>

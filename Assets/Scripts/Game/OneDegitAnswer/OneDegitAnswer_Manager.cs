@@ -50,6 +50,22 @@ public class OneDegitAnswer_Manager : MonoBehaviour
         stageManager.SetAnswer(stageManager.inputInstances[calcData.answer], vaildInputInstances);
     }
 
+    /// <summary>
+    /// パフォーマーの魔法復元を行う関数
+    /// </summary>
+    public void RestoreCalcData()
+    {
+        if (restoreCalcData == null)
+        {
+            return;
+        }
+        calcData = new CalcData(restoreCalcData.firstNumber, restoreCalcData.secondNumber, restoreCalcData.operatorChar);
+        calcData.answer = restoreCalcData.answer;
+        // 有効な入力インスタンスを設定する
+        SetVaildInputInstances();
+        stageManager.SetAnswer(stageManager.inputInstances[calcData.answer], vaildInputInstances);
+        restoreCalcData = null;
+    }
 
     /// <summary>
     /// パフォーマーの魔法発動をリクエストし、成功した場合は魔法データを返す
