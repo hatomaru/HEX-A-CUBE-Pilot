@@ -19,6 +19,7 @@ public class CpuGnerator : MonoBehaviour
     [SerializeField] CpuData[] cpus = new CpuData[cpuMax];   // Cpuデータ配列
     StageUI stageUI;
     List<InputInstance> answerList = new List<InputInstance>(); // 答えの入力インスタンスリスト
+    [SerializeField] StageManager stageManager;
 
     float generateInterval = 0.01f;         // Cpu出現間隔
 
@@ -164,11 +165,11 @@ public class CpuGnerator : MonoBehaviour
             cpus[i] = new CpuData(type, i + 1, genDuration);
         }
         // 置き換え用Cpuデータで置き換え
-        for (int i = 0; i < replaceCpus.Length; i++)
+        for (int i = 0; i < stageManager.stageInfo.replaceCpus.Length; i++)
         {
             if (i >= cpuMax)
                 break;
-            cpus[i] = replaceCpus[i];
+            cpus[i] = stageManager.stageInfo.replaceCpus[i];
         }
         isInit = true;
     }

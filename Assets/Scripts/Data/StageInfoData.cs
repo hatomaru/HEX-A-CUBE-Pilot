@@ -10,6 +10,7 @@ public class StageInfoData : ScriptableObject
     public string StageName;     // ステージ名
     public float TimeLimit;      // 制限時間（秒）
     public int GameLevel;        // お題の難易度
+    public CpuData[] replaceCpus;
 
     /// <summary>
     /// お題の難易度を変更する
