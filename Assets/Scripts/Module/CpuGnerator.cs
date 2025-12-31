@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class CpuGnerator : MonoBehaviour
     StageUI stageUI;
     List<InputInstance> answerList = new List<InputInstance>(); // 答えの入力インスタンスリスト
     [SerializeField] StageManager stageManager;
+    [SerializeField] WarningEffect warinigEffect;
 
     float generateInterval = 0.01f;         // Cpu出現間隔
 
@@ -38,38 +40,83 @@ public class CpuGnerator : MonoBehaviour
         {
             if (cpus[i] == null || cpus[i].genDuration < 0)
                 continue;
+            // 警告を再生する
             cpus[i].genDuration -= Time.deltaTime;
+            if(cpus[i].genDuration < WarningEffect.WarningDuration
+                && cpus[i].type == CpuType.Performer
+                && !cpus[i].isAnimationEnded)
+            {
+                cpus[i].isAnimationEnded = true;
+                warinigEffect.OnPerformerWarning(destroyCancellationToken).Forget();
+            }
+            if (i == 75 &&
+                cpus[i].genDuration < WarningEffect.WarningDuration
+          && !cpus[i].isAnimationEnded)
+            {
+                cpus[i].isAnimationEnded = true;
+                warinigEffect.OnVirusWarning(destroyCancellationToken).Forget();
+            }
             if (cpus[i].genDuration <= 0)
             {
                 // Cpu出現処理
                 GameObject cpuObj;
                 Vector3 localScale;
-                if (cpus[i].type == CpuType.Misstake)
+                switch(cpus[i].type)
                 {
-                    cpuObj = Instantiate(cpuPrefabs[(int)cpus[i].type], backParent);
-                    localScale = cpuObj.GetComponent<RectTransform>().localScale;
-                    cpuObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(generateBackRangeStart.x, generateBackRangeEnd.x),
-                                                                                Random.Range(generateBackRangeStart.y, generateBackRangeEnd.y));
-                    cpuObj.GetComponent<RectTransform>().localScale = Vector3.zero;
-                    cpuObj.GetComponent<RectTransform>().DOScale(localScale, generateInterval * 2)
-                        .SetEase(Ease.InOutBounce);
-                    cpuObj.GetComponent<RectTransform>().DOAnchorPosY(500, generateInterval * 7)
-                        .SetEase(Ease.InOutCirc)
-                        .SetDelay(generateInterval * 2);
-                    Destroy(cpuObj, generateInterval * 10);
+                    case CpuType.Performer:
+                        MagicData magicData = stageManager.OnMagicRequest();
+                        // 魔法が発動しなかった場合
+                        if (magicData == null)
+                        {
+                            cpuObj = Instantiate(cpuPrefabs[(int)cpus[i].type], backParent);
+                            localScale = cpuObj.GetComponent<RectTransform>().localScale;
+                            cpuObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(generateBackRangeStart.x, generateBackRangeEnd.x),
+                                                                                        Random.Range(generateBackRangeStart.y, generateBackRangeEnd.y));
+                            cpuObj.GetComponent<RectTransform>().localScale = Vector3.zero;
+                            cpuObj.GetComponent<RectTransform>().DOScale(localScale, generateInterval * 2)
+                                .SetEase(Ease.InOutBounce);
+                            cpuObj.GetComponent<RectTransform>().DOAnchorPosY(500, generateInterval * 7)
+                                .SetEase(Ease.InOutCirc)
+                                .SetDelay(generateInterval * 2);
+                            Destroy(cpuObj, generateInterval * 10);
+                            cpuObj.GetComponent<CpuInstance>().Init(cpus[i]);
+                            break;
+                        }
+                        cpuObj = Instantiate(cpuPrefabs[(int)cpus[i].type], frontParent);
+                        localScale = cpuObj.GetComponent<RectTransform>().localScale;
+                        cpuObj.GetComponent<RectTransform>().anchoredPosition = magicData.genPos;
+                        cpuObj.GetComponent<RectTransform>().localScale = Vector3.zero;
+                        cpuObj.GetComponent<RectTransform>().DOScale(magicData.genScale, generateInterval * 3)
+                            .SetEase(Ease.InOutBounce);
+                        cpuObj.GetComponent<PerformerCpu>().Init(destroyCancellationToken,magicData, generateInterval * 20).Forget();
+                        Destroy(cpuObj, generateInterval * 20);
+                        break;
+                    case CpuType.Misstake:
+                        cpuObj = Instantiate(cpuPrefabs[(int)cpus[i].type], backParent);
+                        localScale = cpuObj.GetComponent<RectTransform>().localScale;
+                        cpuObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(generateBackRangeStart.x, generateBackRangeEnd.x),
+                                                                                    Random.Range(generateBackRangeStart.y, generateBackRangeEnd.y));
+                        cpuObj.GetComponent<RectTransform>().localScale = Vector3.zero;
+                        cpuObj.GetComponent<RectTransform>().DOScale(localScale, generateInterval * 2)
+                            .SetEase(Ease.InOutBounce);
+                        cpuObj.GetComponent<RectTransform>().DOAnchorPosY(500, generateInterval * 7)
+                            .SetEase(Ease.InOutCirc)
+                            .SetDelay(generateInterval * 2);
+                        Destroy(cpuObj, generateInterval * 10);
+                        cpuObj.GetComponent<CpuInstance>().Init(cpus[i]);
+                        break;
+                    default:
+                        cpuObj = Instantiate(cpuPrefabs[(int)cpus[i].type], frontParent);
+                        localScale = cpuObj.GetComponent<RectTransform>().localScale;
+                        cpuObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(generateFrontRangeStart.x, generateFrontRangeEnd.x),
+                                                                                    Random.Range(generateFrontRangeStart.y, generateFrontRangeEnd.y));
+                        cpuObj.GetComponent<RectTransform>().localScale = Vector3.zero;
+                        cpuObj.GetComponent<RectTransform>().DOScale(localScale, generateInterval * 3)
+                            .SetEase(Ease.InOutBounce);
+                        Destroy(cpuObj, generateInterval * 15);
+                        cpuObj.GetComponent<CpuInstance>().Init(cpus[i]);
+                        break;
                 }
-                else
-                {
-                    cpuObj = Instantiate(cpuPrefabs[(int)cpus[i].type], frontParent);
-                    localScale = cpuObj.GetComponent<RectTransform>().localScale;
-                    cpuObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(generateFrontRangeStart.x, generateFrontRangeEnd.x),
-                                                                                Random.Range(generateFrontRangeStart.y, generateFrontRangeEnd.y));
-                    cpuObj.GetComponent<RectTransform>().localScale = Vector3.zero;
-                    cpuObj.GetComponent<RectTransform>().DOScale(localScale, generateInterval * 3)
-                        .SetEase(Ease.InOutBounce);
-                    Destroy(cpuObj, generateInterval * 15);
-                }
-                cpuObj.GetComponent<CpuInstance>().Init(cpus[i]);
                 Debug.Log($"Cpu {cpus[i].cpuNumber} ({cpus[i].type.ToString()}) が出現しました。");
                 cpus[i].isGened = true;
                 stageUI.CpuCountDown();
