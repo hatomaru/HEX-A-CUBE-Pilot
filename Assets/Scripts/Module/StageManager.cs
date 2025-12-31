@@ -20,6 +20,8 @@ public class StageManager : MonoBehaviour
     [SerializeField] public StageInfoData stageInfo;
     [SerializeField] UnityEvent<int> onInput;
     [SerializeField] UnityEvent onInit;
+    [SerializeField] UnityEvent<Action<MagicData>> onMagicRequest;
+    [SerializeField] UnityEvent onMagicRestore;
     [SerializeField] MissUI missUI;
     [SerializeField] StageClearUI stageClearUI;
 
@@ -157,6 +159,18 @@ public class StageManager : MonoBehaviour
             inputInstances[input].OnPress(destroyCancellationToken).Forget();
         }
         onInput?.Invoke(input);
+    }
+
+
+    /// <summary>
+    /// パフォーマーの魔法発動をリクエストし、成功した場合は魔法データを返す
+    /// </summary>
+    /// <returns>成功した場合は魔法データを返す</returns>
+    public MagicData OnMagicRequest()
+    {
+        MagicData result = null;
+        onMagicRequest?.Invoke(m => result = m);
+        return result;
     }
 
     /// <summary>
