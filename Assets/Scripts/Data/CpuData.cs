@@ -22,7 +22,8 @@ public class CpuData
     public int cpuNumber;       // Cpuの識別番号
     public float genDuration;   // 出現までの時間
     public bool isGened = false;// Cpuが出現したか
-    
+    public bool isAnimationEnded = false; // Cpuの警告アニメーションが終了したか
+
     /// <summary>
     /// Cpuのデータを初期化するコンストラクタ
     /// </summary>

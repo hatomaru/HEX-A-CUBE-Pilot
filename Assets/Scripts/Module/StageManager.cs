@@ -27,6 +27,7 @@ public class StageManager : MonoBehaviour
 
     CpuGnerator cpuGnerator;
     StageUI stageUI;
+    public AudioPlayer audioPlayer;
     public InputInstance[] inputInstances = new InputInstance[10]; // 入力インスタンス配列
 
     private void Awake()
@@ -96,6 +97,7 @@ public class StageManager : MonoBehaviour
         stageTimmer = stageInfo.TimeLimit;
         cpuGnerator.Init(stageInfo);
         onInit.Invoke();
+        audioPlayer.PlayStageOpen();
         await stageUI.StageWindowPopuop(token);
         await UniTask.Delay(50, cancellationToken: token);
         await PlayInputGuide(token);
@@ -106,6 +108,7 @@ public class StageManager : MonoBehaviour
     /// </summary>
     public async UniTask StageMiss(string reason,CancellationToken token)
     {
+        audioPlayer.PlayWarning();
         isInGameLoop = false;
         canProgressGame = false;
         await missUI.PlayMiss(reason,token);
@@ -118,6 +121,7 @@ public class StageManager : MonoBehaviour
     public async UniTask StageClear(CancellationToken token)
     {
         isInGameLoop = false;
+        audioPlayer.PlayClear();
         await stageUI.StageWindowClose(token);
         await UniTask.Delay(200, cancellationToken: token);
         await stageClearUI.PlayHexCreate("6bab4dac5c809fc9bd5d3bea39c73d7d", token);
