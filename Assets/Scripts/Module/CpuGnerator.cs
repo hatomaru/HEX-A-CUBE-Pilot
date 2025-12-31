@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CpuGnerator : MonoBehaviour
@@ -17,6 +18,7 @@ public class CpuGnerator : MonoBehaviour
     [SerializeField] CpuData[] replaceCpus;      // 置き換え用Cpuデータ配列
     [SerializeField] CpuData[] cpus = new CpuData[cpuMax];   // Cpuデータ配列
     StageUI stageUI;
+    List<InputInstance> answerList = new List<InputInstance>(); // 答えの入力インスタンスリスト
 
     float generateInterval = 0.01f;         // Cpu出現間隔
 
@@ -169,5 +171,30 @@ public class CpuGnerator : MonoBehaviour
             cpus[i] = replaceCpus[i];
         }
         isInit = true;
+    }
+
+    /// <summary>
+    /// 答えを設定する関数
+    /// </summary>
+    public void SetAnswer(InputInstance collectAnswer, List<InputInstance> answerList)
+    {
+        this.answerList.Clear();
+        // 回答候補からランダムに3つ答えを設定
+        for (int i = 0;i < 3; i++)
+        {
+            int rmd = Random.Range(0, answerList.Count);
+            this.answerList.Add(answerList[rmd]);
+        }
+        // 確率を公平にする
+        this.answerList.Add(this.answerList[2]);
+        // 答えをランダムにシャッフル
+        for (int i = 0;i < cpuMax;i++)
+        {
+            if (cpus[i] == null || cpus[i].genDuration < 0)
+                continue;
+            cpus[i].answer = this.answerList[Random.Range(0, this.answerList.Count)].inputData;
+        }
+        // 最後のCpuを答えに設定
+        cpus[cpuMax - 1].answer = collectAnswer.inputData;
     }
 }

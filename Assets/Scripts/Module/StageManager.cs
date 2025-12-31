@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using R3;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,7 +17,7 @@ public class StageManager : MonoBehaviour
 
     public float stageTimmer { get; private set; } = 0f; // ステージタイマー
     InputData[] inputDatas = new InputData[10]; // 入力データ配列
-    [SerializeField] StageInfoData stageInfo;
+    [SerializeField] public StageInfoData stageInfo;
     [SerializeField] UnityEvent<int> onInput;
     [SerializeField] UnityEvent onInit;
     [SerializeField] MissUI missUI;
@@ -91,11 +92,11 @@ public class StageManager : MonoBehaviour
     private async UniTask StageStart(CancellationToken token)
     {
         stageTimmer = stageInfo.TimeLimit;
+        cpuGnerator.Init(stageInfo);
         onInit.Invoke();
         await stageUI.StageWindowPopuop(token);
         await UniTask.Delay(50, cancellationToken: token);
         await PlayInputGuide(token);
-        cpuGnerator.Init(stageInfo);
     }
 
     /// <summary>
@@ -174,6 +175,14 @@ public class StageManager : MonoBehaviour
     public void SetStageTimeLimit(float timeLimit)
     {
         stageInfo.TimeLimit = timeLimit;
+    }
+
+    /// <summary>
+    /// 答えを設定する関数
+    /// </summary>
+    public void SetAnswer(InputInstance collectAnswer,List<InputInstance> answerList)
+    {
+        cpuGnerator.SetAnswer(collectAnswer, answerList);
     }
 
     /// <summary>
