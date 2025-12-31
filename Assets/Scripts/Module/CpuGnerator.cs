@@ -52,10 +52,10 @@ public class CpuGnerator : MonoBehaviour
                     cpuObj.GetComponent<RectTransform>().localScale = Vector3.zero;
                     cpuObj.GetComponent<RectTransform>().DOScale(localScale, generateInterval * 2)
                         .SetEase(Ease.InOutBounce);
-                    cpuObj.GetComponent<RectTransform>().DOAnchorPosY(500, generateInterval * 3)
+                    cpuObj.GetComponent<RectTransform>().DOAnchorPosY(500, generateInterval * 7)
                         .SetEase(Ease.InOutCirc)
                         .SetDelay(generateInterval * 2);
-                    Destroy(cpuObj, generateInterval * 5);
+                    Destroy(cpuObj, generateInterval * 10);
                 }
                 else
                 {
