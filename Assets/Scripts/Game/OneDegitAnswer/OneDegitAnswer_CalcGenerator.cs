@@ -50,8 +50,9 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
     /// 答えが一桁になる計算問題を生成する
     /// </summary>
     /// <param name="stageInfo"></param>ステージ情報データ</param>
+    /// <param name="firstN">最初の数字を指定する場合、その値をセット。-1の場合はランダム生成</param>
     /// <returns>生成した計算問題</returns>
-    public CalcData Gen(StageInfoData stageInfo)
+    public CalcData Gen(StageInfoData stageInfo, float firstN = -1)
     {
         int operatorIndex = Random.Range(0, 2);
         if (stageInfo.GameLevel == 3)
@@ -63,6 +64,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
             while (true)
             {
                 int answer = Random.Range(0, 8); // 一桁整数
+
                 int answerInt = answer * decimalScale;
 
                 int firstInt, secondInt;
@@ -70,12 +72,20 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
                 if (op == '+')
                 {
                     firstInt = Random.Range(0, answerInt + 1);
+                    if (firstInt != -1)
+                    {
+                        firstInt = (int)firstN;
+                    }
                     secondInt = answerInt - firstInt;
                 }
                 else
                 {
                     secondInt = Random.Range(0, 80);
                     firstInt = secondInt + answerInt;
+                    if (firstInt != -1)
+                    {
+                        firstInt = (int)firstN;
+                    }
                 }
 
                 // 表示範囲チェック
@@ -93,36 +103,48 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
             // ゲームレベル2ではかけ算、わり算のみ
             operatorIndex = Random.Range(2, 4);
         }
-            if (operatorIndex < 2)
+        if (operatorIndex < 2)
+        {
+            // 演算子が足し算、引き算の場合
+            int first = Random.Range(1, 8);
+            if (first != -1)
             {
-                // 演算子が足し算、引き算の場合
-                int first = Random.Range(1, 8);
-                int second = Random.Range(1, 8 - first);
-                char op = operatorIndex == 0 ? '+' : '-';
-                // 引き算の場合、答えが負にならないように調整
-                if (op == '-' && first < second)
-                {
-                    int temp = first;
-                    first = second;
-                    second = temp;
-                }
-                return new CalcData(first, second, op);
+                first = (int)firstN;
             }
-            else if (operatorIndex == 2)
+            int second = Random.Range(1, 8 - first);
+            char op = operatorIndex == 0 ? '+' : '-';
+            // 引き算の場合、答えが負にならないように調整
+            if (op == '-' && first < second)
             {
-                // 演算子が掛け算の場合
-                int first = Random.Range(1, 4);
-                int second = Random.Range(1, 4);
-                return new CalcData(first, second, '×');
+                int temp = first;
+                first = second;
+                second = temp;
             }
-            else if (operatorIndex >= 3)
+            return new CalcData(first, second, op);
+        }
+        else if (operatorIndex == 2)
+        {
+            // 演算子が掛け算の場合
+            int first = Random.Range(1, 4);
+            if (first != -1)
             {
-                // 演算子が割り算の場合
-                int second = Random.Range(1, 4);
-                int answer = Random.Range(1, 4);
-                int first = second * answer;
-                return new CalcData(first, second, '÷');
+                first = (int)firstN;
             }
+            int second = Random.Range(1, 4);
+            return new CalcData(first, second, '×');
+        }
+        else if (operatorIndex >= 3)
+        {
+            // 演算子が割り算の場合
+            int second = Random.Range(1, 4);
+            if (second != -1)
+            {
+                second = (int)firstN;
+            }
+            int answer = Random.Range(1, 4);
+            int first = second * answer;
+            return new CalcData(first, second, '÷');
+        }
         // 未実装の場合はダミーを返す
         return new CalcData(0, 0, '+');
     }
