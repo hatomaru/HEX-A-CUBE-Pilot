@@ -67,7 +67,7 @@ public class PilotGameLoop : MonoBehaviour
         } else{
             stageInfo.GameLevel = 1;
         }
-        float performerRate = stageInfo.GameLevel / 100;
+        float performerRate = stageInfo.TimeLimit / 100;
         int cpuNo = Random.Range(30, 70);
         // パフォーマーを1体出現させる
         stageInfo.replaceCpus = new CpuData[]
