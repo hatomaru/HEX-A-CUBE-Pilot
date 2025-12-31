@@ -68,7 +68,7 @@ public class CpuGnerator : MonoBehaviour
                         // 魔法が発動しなかった場合
                         if (magicData == null)
                         {
-                            cpuObj = Instantiate(cpuPrefabs[(int)cpus[i].type], backParent);
+                            cpuObj = Instantiate(cpuPrefabs[0], backParent);
                             localScale = cpuObj.GetComponent<RectTransform>().localScale;
                             cpuObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(generateBackRangeStart.x, generateBackRangeEnd.x),
                                                                                         Random.Range(generateBackRangeStart.y, generateBackRangeEnd.y));
@@ -80,7 +80,9 @@ public class CpuGnerator : MonoBehaviour
                                 .SetDelay(generateInterval * 2);
                             Destroy(cpuObj, generateInterval * 10);
                             cpuObj.GetComponent<CpuInstance>().Init(cpus[i]);
-                            break;
+                            cpus[i].isGened = true;
+                            stageUI.CpuCountDown();
+                            return;
                         }
                         cpuObj = Instantiate(cpuPrefabs[(int)cpus[i].type], frontParent);
                         localScale = cpuObj.GetComponent<RectTransform>().localScale;
