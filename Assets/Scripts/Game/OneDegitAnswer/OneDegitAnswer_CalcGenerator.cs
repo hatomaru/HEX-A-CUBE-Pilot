@@ -72,7 +72,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
                 if (op == '+')
                 {
                     firstInt = Random.Range(0, answerInt + 1);
-                    if (firstInt != -1)
+                    if (firstN != -1)
                     {
                         firstInt = (int)firstN;
                     }
@@ -82,7 +82,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
                 {
                     secondInt = Random.Range(0, 80);
                     firstInt = secondInt + answerInt;
-                    if (firstInt != -1)
+                    if (firstN != -1)
                     {
                         firstInt = (int)firstN;
                     }
@@ -107,7 +107,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
         {
             // 演算子が足し算、引き算の場合
             int first = Random.Range(1, 8);
-            if (first != -1)
+            if (firstN != -1)
             {
                 first = (int)firstN;
             }
@@ -126,7 +126,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
         {
             // 演算子が掛け算の場合
             int first = Random.Range(1, 4);
-            if (first != -1)
+            if (firstN != -1)
             {
                 first = (int)firstN;
             }
@@ -137,7 +137,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
         {
             // 演算子が割り算の場合
             int second = Random.Range(1, 4);
-            if (second != -1)
+            if (firstN != -1)
             {
                 second = (int)firstN;
             }
