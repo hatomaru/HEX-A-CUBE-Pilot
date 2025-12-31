@@ -49,15 +49,16 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
     /// <summary>
     /// 答えが一桁になる計算問題を生成する
     /// </summary>
+    /// <param name="stageInfo"></param>ステージ情報データ</param>
     /// <returns>生成した計算問題</returns>
-    public CalcData Gen()
+    public CalcData Gen(StageInfoData stageInfo)
     {
         int operatorIndex = Random.Range(0, 2);
         if(operatorIndex < 2)
         {
             // 演算子が足し算、引き算の場合
-            int first = Random.Range(0, 8);
-            int second = Random.Range(0, 8 - first);
+            int first = Random.Range(1, 8);
+            int second = Random.Range(1, 8 - first);
             char op = operatorIndex == 0 ? '+' : '-';
             // 引き算の場合、答えが負にならないように調整
             if(op == '-' && first < second)
