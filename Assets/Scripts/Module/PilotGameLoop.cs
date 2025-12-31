@@ -1,9 +1,7 @@
 using Cysharp.Threading.Tasks;
+using R3;
 using System.Threading;
 using UnityEngine;
-using R3.Triggers;
-using R3.Collections;
-using R3;
 
 public class PilotGameLoop : MonoBehaviour
 {
@@ -44,7 +42,17 @@ public class PilotGameLoop : MonoBehaviour
     private async UniTask GenStage(CancellationToken token)
     {
         cube++;
+        StageInfoData stageInfo = new StageInfoData()
+        {
+            StageName = "ヒトケタ計算",
+            TimeLimit = 12f - (cube - 1) * 0.68f,
+        };
+        if (cube >= 15)
+        {
+            stageInfo.TimeLimit = 12f - 15 * 0.68f - 0.02f * (cube - 15);
+        }
         stageUI.InitStageText(cube);
+        stageManager.stageInfo = stageInfo;
         await stageManager.GameLoop(token);
     }
 
