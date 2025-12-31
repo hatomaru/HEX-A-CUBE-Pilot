@@ -47,9 +47,25 @@ public class PilotGameLoop : MonoBehaviour
             StageName = "ヒトケタ計算",
             TimeLimit = 12f - (cube - 1) * 0.68f,
         };
-        if (cube >= 15)
+        // ゲームレベルの設定
+        if (cube >= 100)
         {
+            stageInfo.GameLevel = 3;
+            stageInfo.TimeLimit = 12f - 15 * 0.68f - 0.02f * 85;
+        }
+        else if (cube >= 15)
+        {
+            stageInfo.GameLevel = 3;
             stageInfo.TimeLimit = 12f - 15 * 0.68f - 0.02f * (cube - 15);
+        }else if(cube >= 10)
+        {
+            stageInfo.GameLevel = 3;
+        }
+        else if(cube >= 5)
+        {
+            stageInfo.GameLevel = 2;
+        } else{
+            stageInfo.GameLevel = 1;
         }
         stageUI.InitStageText(cube);
         stageManager.stageInfo = stageInfo;
