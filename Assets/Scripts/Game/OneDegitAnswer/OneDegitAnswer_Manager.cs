@@ -62,13 +62,13 @@ public class OneDegitAnswer_Manager : MonoBehaviour
             case '+':
                 if (calcData.firstNumber - calcData.secondNumber >= 0 && calcData.firstNumber - calcData.secondNumber != calcData.answer)
                 {
-                    vaildInputInstances.Add(stageManager.inputInstances[calcData.firstNumber - calcData.secondNumber]);
+                    vaildInputInstances.Add(stageManager.inputInstances[(int)(calcData.firstNumber - calcData.secondNumber)]);
                 }
                 break;
             case '-':
                 if (calcData.firstNumber + calcData.secondNumber <= 9 && calcData.firstNumber + calcData.secondNumber != calcData.answer)
                 {
-                    vaildInputInstances.Add(stageManager.inputInstances[calcData.firstNumber + calcData.secondNumber]);
+                    vaildInputInstances.Add(stageManager.inputInstances[(int)(calcData.firstNumber + calcData.secondNumber)]);
                 }
                 break;
             case '*':

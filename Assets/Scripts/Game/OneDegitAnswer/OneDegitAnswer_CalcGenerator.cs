@@ -5,8 +5,8 @@ using UnityEngine;
 /// </summary>
 public class CalcData
 {
-    public int firstNumber;
-    public int secondNumber;
+    public float firstNumber;
+    public float secondNumber;
     public int answer;
     public char operatorChar; // '+', '-', '×', '÷'のいずれかが入る
 
@@ -16,7 +16,7 @@ public class CalcData
     /// <param name="first">左辺の値</param>
     /// <param name="second"></param>
     /// <param name="op"></param>
-    public CalcData(int first, int second, char op)
+    public CalcData(float first, float second, char op)
     {
         firstNumber = first;
         secondNumber = second;
@@ -25,16 +25,16 @@ public class CalcData
         switch (operatorChar)
         {
             case '+':
-                answer = firstNumber + secondNumber;
+                answer = (int)(firstNumber + secondNumber);
                 break;
             case '-':
-                answer = firstNumber - secondNumber;
+                answer = (int)(firstNumber - secondNumber);
                 break;
             case '×':
-                answer = firstNumber * secondNumber;
+                answer = (int)(firstNumber * secondNumber);
                 break;
             case '÷':
-                answer = firstNumber / secondNumber;
+                answer = (int)(firstNumber / secondNumber);
                 break;
             default:
                 Debug.LogError("Invalid operator");
@@ -54,22 +54,76 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
     public CalcData Gen(StageInfoData stageInfo)
     {
         int operatorIndex = Random.Range(0, 2);
-        if(operatorIndex < 2)
+        if (stageInfo.GameLevel == 3)
         {
-            // 演算子が足し算、引き算の場合
-            int first = Random.Range(1, 8);
-            int second = Random.Range(1, 8 - first);
-            char op = operatorIndex == 0 ? '+' : '-';
-            // 引き算の場合、答えが負にならないように調整
-            if(op == '-' && first < second)
+            // ゲームレベル3では少数を含むたし算、ひき算のみ
+            int decimalScale = 10;
+            char op = Random.Range(0, 2) == 0 ? '+' : '-';
+
+            while (true)
             {
-                int temp = first;
-                first = second;
-                second = temp;
+                int answer = Random.Range(0, 8); // 一桁整数
+                int answerInt = answer * decimalScale;
+
+                int firstInt, secondInt;
+
+                if (op == '+')
+                {
+                    firstInt = Random.Range(0, answerInt + 1);
+                    secondInt = answerInt - firstInt;
+                }
+                else
+                {
+                    secondInt = Random.Range(0, 80);
+                    firstInt = secondInt + answerInt;
+                }
+
+                // 表示範囲チェック
+                if (firstInt < 10 || firstInt > 80) continue;
+                if (secondInt < 0 || secondInt > 80) continue;
+
+                float first = firstInt / (float)decimalScale;
+                float second = secondInt / (float)decimalScale;
+
+                return new CalcData(first, second, op);
             }
-            return new CalcData(first, second, op);
         }
+        if (stageInfo.GameLevel == 2)
+        {
+            // ゲームレベル2ではかけ算、わり算のみ
+            operatorIndex = Random.Range(2, 4);
+        }
+            if (operatorIndex < 2)
+            {
+                // 演算子が足し算、引き算の場合
+                int first = Random.Range(1, 8);
+                int second = Random.Range(1, 8 - first);
+                char op = operatorIndex == 0 ? '+' : '-';
+                // 引き算の場合、答えが負にならないように調整
+                if (op == '-' && first < second)
+                {
+                    int temp = first;
+                    first = second;
+                    second = temp;
+                }
+                return new CalcData(first, second, op);
+            }
+            else if (operatorIndex == 2)
+            {
+                // 演算子が掛け算の場合
+                int first = Random.Range(1, 4);
+                int second = Random.Range(1, 4);
+                return new CalcData(first, second, '×');
+            }
+            else if (operatorIndex >= 3)
+            {
+                // 演算子が割り算の場合
+                int second = Random.Range(1, 4);
+                int answer = Random.Range(1, 4);
+                int first = second * answer;
+                return new CalcData(first, second, '÷');
+            }
         // 未実装の場合はダミーを返す
-        return new CalcData(0,0,'+');
+        return new CalcData(0, 0, '+');
     }
 }
