@@ -2,18 +2,27 @@ using Cysharp.Threading.Tasks;
 using LitMotion;
 using LitMotion.Extensions;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 
 public class StageUI : MonoBehaviour
 {
     [SerializeField] RectTransform stageWindow; // ステージウィンドウ
     [SerializeField] RectTransform stageTimerFill; // ステージタイマー
-    StageManager stageManager;
+    [SerializeField] TextMeshProUGUI stageNoText;    // ステージ番号テキスト
+    [SerializeField] TextMeshProUGUI stageCpuText;   // ステージCpu数テキスト
 
+    StageManager stageManager;
+    int cpuCount = 0;                     // 現在の残りCpu数
     void Awake()
     {
         stageManager = GetComponent<StageManager>();
-        stageWindow.localScale = Vector3.one;
+        stageWindow.localScale = new Vector3(0f, 0.71122998f, 0.71122998f);
+    }
+
+    public void InitStageText(int cube)
+    {
+        stageNoText.text = $"<size=22>Cube</size> #{cube}";
     }
 
     /// <summary>
@@ -22,6 +31,15 @@ public class StageUI : MonoBehaviour
     public void ResetUI()
     {
         stageTimerFill.localScale = Vector3.one;
+        cpuCount = CpuGnerator.cpuMax;
+    }
+
+    /// <summary>
+    /// CPUカウントを進める
+    /// </summary>
+    public void CpuCountDown()
+    {
+        cpuCount--;
     }
 
     /// <summary>
@@ -29,6 +47,7 @@ public class StageUI : MonoBehaviour
     /// </summary>
     public void UpdateUI()
     {
+        stageCpuText.text = $"あと<size=42>{cpuCount}</size>CPU";
         stageTimerFill.localScale = new Vector3(stageManager.stageTimmer / stageManager.GetStageInfo().TimeLimit, 1f, 1f);
     }
 

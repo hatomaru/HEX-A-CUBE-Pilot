@@ -4,7 +4,7 @@ using UnityEngine;
 public class CpuGnerator : MonoBehaviour
 {
     bool isInit = false;                  // 初期化フラグ
-    const int cpuMax = 100;                 // 最大Cpu数
+    public static int cpuMax { get; private set; } = 100;                 // 最大Cpu数
 
     [SerializeField] Transform frontParent;      // 前方親オブジェクト
     [SerializeField] Transform backParent;       // 後方親オブジェクト
@@ -16,7 +16,14 @@ public class CpuGnerator : MonoBehaviour
     [SerializeField] GameObject[] cpuPrefabs;    // Cpuプレハブ配列
     [SerializeField] CpuData[] replaceCpus;      // 置き換え用Cpuデータ配列
     [SerializeField] CpuData[] cpus = new CpuData[cpuMax];   // Cpuデータ配列
+    StageUI stageUI;
+
     float generateInterval = 0.01f;         // Cpu出現間隔
+
+    private void Awake()
+    {
+        stageUI = GetComponent<StageUI>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -62,7 +69,8 @@ public class CpuGnerator : MonoBehaviour
                 cpuObj.GetComponent<CpuInstance>().Init(cpus[i]);
                 Debug.Log($"Cpu {cpus[i].cpuNumber} ({cpus[i].type.ToString()}) が出現しました。");
                 cpus[i].isGened = true;
-                if(i == 99)
+                stageUI.CpuCountDown();
+                if (i == 99)
                 {
                     isInit = false;
                 }
