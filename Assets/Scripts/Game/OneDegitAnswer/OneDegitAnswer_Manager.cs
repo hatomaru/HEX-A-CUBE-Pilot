@@ -90,6 +90,8 @@ public class OneDegitAnswer_Manager : MonoBehaviour
                         {
                             calcData.operatorChar = '-';
                             calcData.answer = (int)(calcData.firstNumber - calcData.secondNumber);
+                            // オペレーター変更魔法を発動
+                            magicData = new MagicData(rndKey.ToString(), calcData.operatorChar.ToString(), new Vector2(-34, 47), new Vector3(1, 1, 1));
                         }
                         else
                         {
@@ -102,6 +104,8 @@ public class OneDegitAnswer_Manager : MonoBehaviour
                         {
                             calcData.operatorChar = '+';
                             calcData.answer = (int)(calcData.firstNumber + calcData.secondNumber);
+                            // オペレーター変更魔法を発動
+                            magicData = new MagicData(rndKey.ToString(), calcData.operatorChar.ToString(), new Vector2(-34, 47), new Vector3(1, 1, 1));
                         }
                         else
                         {
@@ -114,6 +118,8 @@ public class OneDegitAnswer_Manager : MonoBehaviour
                         {
                             calcData.operatorChar = '÷';
                             calcData.answer = (int)(calcData.firstNumber / calcData.secondNumber);
+                            // オペレーター変更魔法を発動
+                            magicData = new MagicData(rndKey.ToString(), calcData.operatorChar.ToString(), new Vector2(-34, 47), new Vector3(1, 1, 1));
                         }
                         else
                         {
@@ -126,18 +132,37 @@ public class OneDegitAnswer_Manager : MonoBehaviour
                         {
                             calcData.operatorChar = '×';
                             calcData.answer = (int)(calcData.firstNumber * calcData.secondNumber);
+                            // オペレーター変更魔法を発動
+                            magicData = new MagicData(rndKey.ToString(), calcData.operatorChar.ToString(), new Vector2(-34, 47), new Vector3(1, 1, 1));
                         }
                         else
                         {
                             break;
                         }
                     }
-                    // オペレーター変更魔法を発動
-                    magicData = new MagicData(rndKey.ToString(), calcData.operatorChar.ToString(), new Vector2(-34, 47), new Vector3(1, 1, 1));
                     break;
                 case MagicKey.ChangeRightNumbers:
                     // 数字変更魔法を発動
                     calcData = calcGenerator.Gen(stageManager.stageInfo, calcData.firstNumber);
+                    float a = calcData.firstNumber;
+                    float b = calcData.secondNumber;
+                    calcData.firstNumber = a;
+                    calcData.secondNumber = b;
+                    switch(calcData.operatorChar)
+                    {
+                        case '+':
+                            calcData.answer = (int)(calcData.firstNumber + calcData.secondNumber);
+                            break;
+                        case '-':
+                            calcData.answer = (int)(calcData.firstNumber - calcData.secondNumber);
+                            break;
+                        case '×':
+                            calcData.answer = (int)(calcData.firstNumber * calcData.secondNumber);
+                            break;
+                        case '÷':
+                            calcData.answer = (int)(calcData.firstNumber / calcData.secondNumber);
+                            break;
+                    }
                     magicData = new MagicData(rndKey.ToString(), calcData.secondNumber.ToString(), new Vector2(24.4f, 47), new Vector3(1.31092167f, 1.19174695f, 1.19174695f));
                     break;
             }
