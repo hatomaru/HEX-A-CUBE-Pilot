@@ -27,6 +27,7 @@ public class MissUI : MonoBehaviour
     /// <param name="reason">ミスの理由</param>
     public async UniTask PlayMiss(string reason,CancellationToken token)
     {
+        resultRect.localScale = Vector3.zero;
         reasonText.text = reason;
         LMotion.Create(0f,1f,0.25f)
             .WithEase(Ease.InSine)
@@ -42,5 +43,18 @@ public class MissUI : MonoBehaviour
             .BindToAlpha(commandCanvasGroup)
             .AddTo(gameObject);
         canvasGroup.blocksRaycasts = true;
+    }
+
+    /// <summary>
+    /// ミス演出を非表示にする
+    /// </summary>
+    public async UniTask HideMiss(CancellationToken token)
+    {
+        canvasGroup.blocksRaycasts = false;
+        await LMotion.Create(1f, 0f, 0.25f)
+            .WithEase(Ease.InSine)
+            .BindToAlpha(canvasGroup)
+            .AddTo(gameObject);
+        commandCanvasGroup.alpha = 0f;
     }
 }
