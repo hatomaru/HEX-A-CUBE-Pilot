@@ -22,7 +22,7 @@ public class StageUI : MonoBehaviour
 
     public void InitStageText(int cube)
     {
-        stageNoText.text = $"<size=22>Cube</size> #{cube}";
+        stageNoText.text = $"<size=22>Cube</size> #{cube.ToString("00")}";
     }
 
     /// <summary>
