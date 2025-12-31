@@ -20,8 +20,16 @@ public class PilotGameLoop : MonoBehaviour
                 await GenStage(destroyCancellationToken);
             })
             .AddTo(this);
+        InitGame(destroyCancellationToken).Forget();
+    }
+
+    /// <summary>
+    /// ゲームループを初期化
+    /// </summary>
+    private async UniTask InitGame(CancellationToken token)
+    {
         StageManager.canProgressGame = true;
-        GenStage(destroyCancellationToken).Forget();
+        await GenStage(destroyCancellationToken);
     }
 
     /// <summary>
