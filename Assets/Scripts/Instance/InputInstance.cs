@@ -11,7 +11,7 @@ public class InputInstance : MonoBehaviour
     readonly Color onColorFill = new Color(0.09967953f, 0.3880405f, 0.5031446f, 0.9f);
     readonly Color offColorFill = new Color(0.01542656f, 0.2393069f, 0.327044f, 0.9f);
 
-    InputData inputData;
+    public InputData inputData { get; private set; }
     RectTransform rect;
     Vector3 defaultScale = new Vector3(1.7f, 1.41f, 1.41f);
     [SerializeField] Sprite defaultIcon;              // デフォルトアイコン
