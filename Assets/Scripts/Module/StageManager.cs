@@ -104,6 +104,33 @@ public class StageManager : MonoBehaviour
     }
 
     /// <summary>
+    /// HEX生成機
+    /// </summary>
+    /// <param name="input">入力</param>
+    /// <returns>md5後の数値</returns>
+    public static string CalculateMD5(string input)
+    {
+        // MD5ハッシュオブジェクトを作成
+        // Unity Editor上では`MD5.Create()`が推奨されることが多い
+        using (MD5 md5 = MD5.Create())
+        {
+            // 入力文字列をバイト配列に変換
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+
+            // ハッシュ値を計算（16バイトの配列）
+            byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+            // バイト配列を16進数文字列に変換
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hashBytes.Length; i++)
+            {
+                sb.Append(hashBytes[i].ToString("x2")); // "x2"で2桁の小文字16進数に
+            }
+            return sb.ToString(); // 32文字のMD5ハッシュ文字列
+        }
+    }
+
+    /// <summary>
     /// ミス処理を行う関数
     /// </summary>
     public async UniTask StageMiss(string reason,CancellationToken token)
@@ -118,13 +145,14 @@ public class StageManager : MonoBehaviour
     /// <summary>
     /// ステージクリア処理を行う関数
     /// </summary>
-    public async UniTask StageClear(CancellationToken token)
     {
+        cpuGnerator.SyncCpu(input, performerTimer >= 0);
         isInGameLoop = false;
         audioPlayer.PlayClear();
         await stageUI.StageWindowClose(token);
+        cpuGnerator.AllDestoryCpu();
         await UniTask.Delay(200, cancellationToken: token);
-        await stageClearUI.PlayHexCreate("6bab4dac5c809fc9bd5d3bea39c73d7d", token);
+        await stageClearUI.PlayHexCreate(CalculateMD5("Game#01" + input.Key.ToString() + input.KeyName), token);
         isInGame.Value = false;
     }
 
