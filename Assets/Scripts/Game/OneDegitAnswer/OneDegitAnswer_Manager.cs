@@ -143,7 +143,7 @@ public class OneDegitAnswer_Manager : MonoBehaviour
                     break;
                 case MagicKey.ChangeRightNumbers:
                     // 数字変更魔法を発動
-                    calcData = calcGenerator.Gen(stageManager.stageInfo, calcData.firstNumber);
+                    calcData = calcGenerator.Gen(stageManager.stageInfo, calcData.firstNumber,calcData.operatorChar,calcData.answer);
                     float a = calcData.firstNumber;
                     float b = calcData.secondNumber;
                     calcData.firstNumber = a;
@@ -249,12 +249,12 @@ public class OneDegitAnswer_Manager : MonoBehaviour
         if (calcData.answer == input)
         {
             // 正解
-            stageManager.StageClear(destroyCancellationToken).Forget();
+            stageManager.StageClear(destroyCancellationToken, stageManager.inputInstances[input].inputData).Forget();
         }
         else
         {
             // 不正解
-            stageManager.StageMiss("不正解です...", destroyCancellationToken).Forget();
+            stageManager.StageMiss("不正解です...", destroyCancellationToken, stageManager.inputInstances[input].inputData).Forget();
         }
     }
 }
