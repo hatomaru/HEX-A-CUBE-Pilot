@@ -23,6 +23,7 @@ public class CpuData
     public float genDuration;   // 出現までの時間
     public bool isGened = false;// Cpuが出現したか
     public bool isAnimationEnded = false; // Cpuの警告アニメーションが終了したか
+    public GameObject instance; // Cpuのインスタンスオブジェクト
 
     /// <summary>
     /// Cpuのデータを初期化するコンストラクタ
