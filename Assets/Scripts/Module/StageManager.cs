@@ -2,9 +2,12 @@ using Cysharp.Threading.Tasks;
 using R3;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Windows;
 
 public class StageManager : MonoBehaviour
 {
@@ -16,6 +19,8 @@ public class StageManager : MonoBehaviour
     public ReactiveProperty<bool> isInGame = new(false);            // ゲーム中フラグ
 
     public float stageTimmer { get; private set; } = 0f; // ステージタイマー
+    public float performerTimer { get; set; } = 0f; // パフォーマータイマー
+
     InputData[] inputDatas = new InputData[10]; // 入力データ配列
     [SerializeField] public StageInfoData stageInfo;
     [SerializeField] UnityEvent<int> onInput;
@@ -58,6 +63,7 @@ public class StageManager : MonoBehaviour
             }
             inputInstance.ResetInput();
         }
+        cpuGnerator.syncConter.Reset();
         stageUI.ResetUI();
         await StageStart(token);
         isInGameLoop = true;
@@ -87,6 +93,7 @@ public class StageManager : MonoBehaviour
     private void UpdateTimer()
     {
         stageTimmer -= Time.deltaTime;
+        performerTimer -= Time.deltaTime;
     }
 
     /// <summary>
@@ -133,8 +140,9 @@ public class StageManager : MonoBehaviour
     /// <summary>
     /// ミス処理を行う関数
     /// </summary>
-    public async UniTask StageMiss(string reason,CancellationToken token)
+    public async UniTask StageMiss(string reason,CancellationToken token, InputData input = null)
     {
+        cpuGnerator.SyncCpu(input, false);
         audioPlayer.PlayWarning();
         isInGameLoop = false;
         canProgressGame = false;
@@ -145,6 +153,7 @@ public class StageManager : MonoBehaviour
     /// <summary>
     /// ステージクリア処理を行う関数
     /// </summary>
+    public async UniTask StageClear(CancellationToken token,InputData input)
     {
         cpuGnerator.SyncCpu(input, performerTimer >= 0);
         isInGameLoop = false;
