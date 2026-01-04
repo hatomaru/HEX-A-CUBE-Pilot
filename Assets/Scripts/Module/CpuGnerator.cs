@@ -92,6 +92,7 @@ public class CpuGnerator : MonoBehaviour
                             .SetEase(Ease.InOutBounce);
                         cpuObj.GetComponent<PerformerCpu>().Init(destroyCancellationToken,magicData, generateInterval * 20).Forget();
                         Destroy(cpuObj, generateInterval * 20);
+                        stageManager.performerTimer = 0.5f;
                         break;
                     case CpuType.Misstake:
                         cpuObj = Instantiate(cpuPrefabs[(int)cpus[i].type], backParent);
@@ -101,10 +102,10 @@ public class CpuGnerator : MonoBehaviour
                         cpuObj.GetComponent<RectTransform>().localScale = Vector3.zero;
                         cpuObj.GetComponent<RectTransform>().DOScale(localScale, generateInterval * 2)
                             .SetEase(Ease.InOutBounce);
-                        cpuObj.GetComponent<RectTransform>().DOAnchorPosY(500, generateInterval * 7)
+                        cpuObj.GetComponent<RectTransform>().DOAnchorPosY(500, generateInterval * 8)
                             .SetEase(Ease.InOutCirc)
                             .SetDelay(generateInterval * 2);
-                        Destroy(cpuObj, generateInterval * 10);
+                        Destroy(cpuObj, generateInterval * 11);
                         cpuObj.GetComponent<CpuInstance>().Init(cpus[i]);
                         break;
                     default:
@@ -121,11 +122,34 @@ public class CpuGnerator : MonoBehaviour
                 }
                 Debug.Log($"Cpu {cpus[i].cpuNumber} ({cpus[i].type.ToString()}) が出現しました。");
                 cpus[i].isGened = true;
+                cpus[i].instance = cpuObj;
                 stageUI.CpuCountDown();
                 if (i == 99)
                 {
                     isInit = false;
                 }
+            }
+        }
+    }
+
+    }
+
+    /// <summary>
+    /// Cpuを全て破棄する関数
+    /// </summary>
+    public void AllDestoryCpu()
+    {
+        for (int i = 0; i < cpuMax; i++)
+        {
+            if (cpus[i].instance == null)
+                continue;
+            if (cpus[i].instance.GetComponent<CpuInstance>() != null && cpus[i].type == CpuType.Virus)
+            {
+                cpus[i].instance.GetComponent<CpuInstance>().Destory();
+            }
+            else if (cpus[i].type != CpuType.Misstake)
+            {
+                Destroy(cpus[i].instance);
             }
         }
     }
