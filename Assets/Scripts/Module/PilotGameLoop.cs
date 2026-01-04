@@ -7,7 +7,7 @@ public class PilotGameLoop : MonoBehaviour
 {
     [SerializeField] StageManager stageManager;
     [SerializeField] StageUI stageUI;
-    int cube = 1;
+    public static int cube = 1;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -68,7 +68,7 @@ public class PilotGameLoop : MonoBehaviour
             stageInfo.GameLevel = 1;
         }
         float performerRate = stageInfo.TimeLimit / 100;
-        int cpuNo = Random.Range(30, 70);
+        int cpuNo = Random.Range(20, 40);
         // パフォーマーを1体出現させる
         stageInfo.replaceCpus = new CpuData[]
         {
