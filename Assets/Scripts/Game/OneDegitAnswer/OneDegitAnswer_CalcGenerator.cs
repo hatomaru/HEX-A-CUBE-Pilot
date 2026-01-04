@@ -51,20 +51,27 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
     /// </summary>
     /// <param name="stageInfo"></param>ステージ情報データ</param>
     /// <param name="firstN">最初の数字を指定する場合、その値をセット。-1の場合はランダム生成</param>
+    /// <param name="op">演算子を指定する場合、その値をセット。'n'の場合はランダム生成</param>
+    /// <param name="answer">答えを指定する場合、その値をセット。-1の場合はランダム生成</param>
     /// <returns>生成した計算問題</returns>
-    public CalcData Gen(StageInfoData stageInfo, float firstN = -1)
+    public CalcData Gen(StageInfoData stageInfo, float firstN = -1,char op = 'n',int answer = -1)
     {
         int operatorIndex = Random.Range(0, 2);
         if (stageInfo.GameLevel == 3)
         {
             // ゲームレベル3では少数を含むたし算、ひき算のみ
             int decimalScale = 10;
-            char op = Random.Range(0, 2) == 0 ? '+' : '-';
-
-            while (true)
+            if (op == 'n')
             {
-                int answer = Random.Range(0, 8); // 一桁整数
-
+                op = Random.Range(0, 2) == 0 ? '+' : '-';
+            }
+            int tryCount = 0;
+            while (tryCount <= 80)
+            {
+                if (answer == -1)
+                {
+                    answer = Random.Range(0, 8); // 一桁整数
+                }
                 int answerInt = answer * decimalScale;
 
                 int firstInt, secondInt;
@@ -81,13 +88,17 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
                 else
                 {
                     secondInt = Random.Range(0, 80);
+                    if(secondInt >= 2)
+                    {
+                        secondInt = secondInt;
+                    }
                     firstInt = secondInt + answerInt;
                     if (firstN != -1)
                     {
                         firstInt = (int)firstN;
                     }
                 }
-
+                tryCount++;
                 // 表示範囲チェック
                 if (firstInt < 10 || firstInt > 80) continue;
                 if (secondInt < 0 || secondInt > 80) continue;
@@ -103,7 +114,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
             // ゲームレベル2ではかけ算、わり算のみ
             operatorIndex = Random.Range(2, 4);
         }
-        if (operatorIndex < 2)
+        if (operatorIndex < 2 || (op == '+' || op == '-'))
         {
             // 演算子が足し算、引き算の場合
             int first = Random.Range(1, 8);
@@ -112,7 +123,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
                 first = (int)firstN;
             }
             int second = Random.Range(1, 8 - first);
-            char op = operatorIndex == 0 ? '+' : '-';
+            op = operatorIndex == 0 ? '+' : '-';
             // 引き算の場合、答えが負にならないように調整
             if (op == '-' && first < second)
             {
@@ -122,7 +133,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
             }
             return new CalcData(first, second, op);
         }
-        else if (operatorIndex == 2)
+        else if (operatorIndex == 2 || op == '×')
         {
             // 演算子が掛け算の場合
             int first = Random.Range(1, 4);
@@ -133,7 +144,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
             int second = Random.Range(1, 4);
             return new CalcData(first, second, '×');
         }
-        else if (operatorIndex >= 3)
+        else if (operatorIndex >= 3 || op == '÷')
         {
             // 演算子が割り算の場合
             int second = Random.Range(1, 4);
@@ -141,7 +152,7 @@ public class OneDegitAnswer_CalcGenerator : MonoBehaviour
             {
                 second = (int)firstN;
             }
-            int answer = Random.Range(1, 4);
+            answer = Random.Range(1, 4);
             int first = second * answer;
             return new CalcData(first, second, '÷');
         }
