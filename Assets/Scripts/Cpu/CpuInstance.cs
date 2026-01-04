@@ -70,4 +70,21 @@ public class CpuInstance : MonoBehaviour
            .AddTo(gameObject);
     }
 
+    public void SyncEffect(CancellationToken token,bool isPerformer)
+    {
+        syncEffectImage.sprite = isPerformer ? goldSyncSprite : normalSyncSprite;
+        LMotion.Create(new Vector3(1.03611183f, 1.03988707f, 0.973039269f),new Vector3(1.35357642f, 1.35850847f, 1.27117848f),0.3f)
+            .WithEase(Ease.InOutCirc)
+            .BindToLocalScale(syncEffectRect)
+            .AddTo(gameObject);
+        LMotion.Create(0f, 1f, 0.05f)
+          .WithEase(Ease.OutSine)
+          .BindToColorA(syncEffectImage)
+          .AddTo(gameObject);
+        LMotion.Create(1f, 0f, 0.15f)
+           .WithEase(Ease.OutSine)
+           .WithDelay(0.25f)
+           .BindToColorA(syncEffectImage)
+           .AddTo(gameObject);
+    }
 }
